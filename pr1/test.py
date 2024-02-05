@@ -1,1 +1,1 @@
-print ('i like Linyx')
+print ('i love Linyx')
