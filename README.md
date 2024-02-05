@@ -1,2 +1,3 @@
-# Teor_inform
-# red os nice system  
+# MIVlGU
+# Information theory
+# IS-122 Balashov Kirill
