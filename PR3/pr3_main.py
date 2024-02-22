@@ -1,4 +1,5 @@
 import math
+#hello
 
 def calculate_alphabet_power(text):
     return len(set(text.lower()))
