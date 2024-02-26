@@ -1,3 +1,5 @@
 print ('i love Linyx')
 def func (x, y):
-    return x**2 + y**2
+    return (x+y)
+z = func(2,5)
+print(z)
