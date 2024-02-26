@@ -18,7 +18,6 @@ class CodeGenerator:
     """Класс для генерации кода Хаффмана."""
     def __init__(self):
         """Инициализация генератора кода Хаффмана."""
-        pass
 
     def generate_huffman_code(self, text):
         """
@@ -77,9 +76,6 @@ if __name__ == "__main__":
                 text_to_encode = file.read()
         except FileNotFoundError:
             print("Ошибка: Файл не найден.")
-            continue
-        except Exception as e:
-            print(f"Ошибка при чтении файла: {e}")
             continue
 
         output_dir = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
