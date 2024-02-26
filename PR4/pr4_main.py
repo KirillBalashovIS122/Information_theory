@@ -70,7 +70,6 @@ if __name__ == "__main__":
     
     while True:
         file_path = input('Введите путь к файлу с текстом для кодирования (или введите "exit" для завершения): ')
-        
         if file_path.lower() == 'exit':
             break
         try:
