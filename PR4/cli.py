@@ -1,4 +1,5 @@
 import os
+import json
 import shutil
 from datetime import datetime
 from huffman import CodeGenerator
@@ -37,7 +38,10 @@ class CLI:
 
                 code_file_path = os.path.join(code_folder_name, "code.json")
 
-                self.generator.gen_code(file_path, code_file_path)
+                code_map = self.generator.gen_code(file_path)
+
+                with open(code_file_path, 'w', encoding='utf-8') as outfile:
+                    json.dump(code_map, outfile, ensure_ascii=False, indent=4)
 
                 print(f"Код Хаффмана успешно сгенерирован и сохранён в {code_file_path}")
             else:

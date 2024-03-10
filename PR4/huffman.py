@@ -1,6 +1,6 @@
 import json
 import heapq
-from collections import Counter, defaultdict
+from collections import Counter
 
 class Node:
     def __init__(self, symbol=None, freq=None):
@@ -9,11 +9,21 @@ class Node:
         self.left = None
         self.right = None
 
+    def __lt__(self, other):
+        return self.freq < other.freq
+
+    def __eq__(self, other):
+        return self.freq == other.freq
+
+    def __ne__(self, other):
+        return self.freq != other.freq
+
+
 class CodeGenerator:
     def __init__(self):
         pass
 
-    def gen_code(self, file_path, output_path):
+    def gen_code(self, file_path):
         try:
             with open(file_path, 'r', encoding='utf-8') as file:
                 text = file.read()
@@ -32,8 +42,7 @@ class CodeGenerator:
 
             code_map = self.build_code_map(heap[0])
 
-            with open(output_path, 'w', encoding='utf-8') as outfile:
-                json.dump(code_map, outfile, ensure_ascii=False, indent=4)
+            return code_map
         except Exception as e:
             raise e
 
