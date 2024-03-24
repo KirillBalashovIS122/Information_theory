@@ -1,3 +1,6 @@
+"""
+CLI 
+"""
 import os
 import json
 import shutil
@@ -71,7 +74,7 @@ class CLI:
                 print(f"Код Хаффмана успешно сгенерирован и сохранён в {code_file_path}")
             else:
                 print("Указанный файл не существует.")
-        except ImportError as e:
+        except OSError as e:
             print(f"Произошла ошибка: {str(e)}")
 
     def delete_history(self):
@@ -86,7 +89,7 @@ class CLI:
             for folder in history_folders:
                 shutil.rmtree(folder)
             print("История создания кодов Хаффмана успешно удалена.")
-        except ImportError as e:
+        except OSError as e:
             print(f"Произошла ошибка при удалении истории: {str(e)}")
 
 def main():
