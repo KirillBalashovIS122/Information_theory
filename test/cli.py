@@ -1,6 +1,14 @@
 from hyffman import HuffmanCoder
 
 def main():
+    """
+    Главная функция программы.
+
+    Выводит меню выбора операций с текстом
+
+    В зависимости от выбора пользователя выполняет соответствующую операцию.
+
+    """
     coder = HuffmanCoder()
 
     while True:
@@ -21,27 +29,27 @@ def main():
                 print("Код Хаффмана успешно сохранен")
             except FileNotFoundError:
                 print("Ошибка: Файл не найден. Проверьте путь к файлу")
-            except Exception as e:
+            except IOError as e:
                 print(f"Ошибка при загрузке файла или кодировании текста: {e}")
         elif choice == '2':
             file_path = input("Введите путь к зашифрованному тексту: ")
-            Haf_key = input("Введите путь к коду Хаффмана: ")             
+            huffman_key_path = input("Введите путь к коду Хаффмана: ")
             try:
                 coder.bin_file_loader(file_path)
-                coder.load_file(Haf_key)               
+                coder.load_file(huffman_key_path)
                 coder.decode()
-                print("Текст успешно расшифрован")                         
+                print("Текст успешно расшифрован")
                 coder.save_decodetxt()
                 print("Файл успешно сохранен")
             except FileNotFoundError:
                 print("Ошибка: Файл не найден. Проверьте путь к файлу")
-            except Exception as e:
+            except IOError as e:
                 print(f"Ошибка при декодировании файла: {e}")
         elif choice == '3':
             try:
                 coder.print_data()
-            except Exception as e:
-                print(f"Ошибка при выводе данных: {e}")
+            except FileNotFoundError:
+                print("Ошибка: Файл не найден. Проверьте путь к файлу")
         elif choice == '4':
             print("Завершение работы программы")
             break
