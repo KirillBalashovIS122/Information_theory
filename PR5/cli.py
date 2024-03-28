@@ -8,7 +8,8 @@ def main():
     coder = HuffmanCoder()
 
     while True:
-        print("\n1. Закодировать текст")
+        print ("\nДобро пожаловать!")
+        print("1. Закодировать текст")
         print("2. Декодировать текст")
         print("3. Вывести данные о файле")
         print("4. Выйти")
