@@ -99,14 +99,15 @@ class HuffmanCoder:
 
     def decode(self):
         """
-    Декодирует бинарное представление текста.
-    """
+        Декодирует бинарное представление текста.
+        """
         if self.bin is None:
             print("Файл не загружен!")
             return
 
-    # Загружаем коды Хаффмана из файла JSON
-        with open(os.path.join(os.path.dirname(__file__), 'code.json'), 'r', encoding='utf-8') as file:
+        # Загружаем коды Хаффмана из файла JSON
+        with open(os.path.join(os.path.dirname(__file__), 'code.json'),
+                  'r', encoding='utf-8') as file:
             self.json = json.load(file)
 
         current_code = ""
@@ -115,7 +116,15 @@ class HuffmanCoder:
             for char, code in self.json.items():
                 if code == current_code:
                     self.decoded_text += char
-                    current_code = ''
+                    current_code = ''  # Сбрасываем текущий код
+                    break
+
+        # Проверяем, были ли добавлены дополнительные нули в конец текста
+        if current_code:
+            # Если остались непрочитанные биты, добавляем недостающие символы, если это возможно
+            for char, code in self.json.items():
+                if code.startswith(current_code):
+                    self.decoded_text += char
                     break
 
     def save_decodetxt(self):
@@ -143,7 +152,7 @@ class HuffmanCoder:
         """
         formatted_codes = {char: code for char, code in self.code.items()}
         with open(os.path.join(os.path.dirname(__file__),
-                               'code.json'), 'w', encoding='utf-8') as file:
+        'code.json'), 'w', encoding='utf-8') as file:
             json.dump(formatted_codes, file, ensure_ascii=False, indent=4)
 
     def shannon_entropy(self, text):
@@ -194,3 +203,13 @@ class HuffmanCoder:
 
         compression_ratio = file_size / encode_file_size
         print(f"Степень сжатия: {compression_ratio}")
+
+    def cleanup_files(self):
+        """
+        Удаляет файлы, созданные во время работы программы.
+        """
+        files_to_delete = ['decode_code.txt', 'result', 'code.json']
+        for file in files_to_delete:
+            file_path = os.path.join(os.path.dirname(__file__), file)
+            if os.path.exists(file_path):
+                os.remove(file_path)

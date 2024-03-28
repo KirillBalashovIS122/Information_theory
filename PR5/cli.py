@@ -3,7 +3,7 @@ from hyffman_code import HuffmanCoder
 
 def main():
     """
-    Основная функция программы, управляющая взаимодействием с пользователем.
+    Основная функция программы, позволяющая пользователю работать с.
     """
     coder = HuffmanCoder()
 
@@ -12,7 +12,8 @@ def main():
         print("1. Закодировать текст")
         print("2. Декодировать текст")
         print("3. Вывести данные о файле")
-        print("4. Выйти")
+        print("4. Удалить все созданные файлы")
+        print("5. Выйти")
 
         choice = input("Введите ваш выбор: ")
         if choice == '1':
@@ -22,6 +23,8 @@ def main():
         elif choice == '3':
             print_file_data(coder)
         elif choice == '4':
+            cleanup_files(coder)
+        elif choice == '5':
             print("Завершение работы программы")
             break
         else:
@@ -77,6 +80,16 @@ def print_file_data(coder):
             coder.print_data()
         except ImportError as e:
             print(f"Ошибка при выводе данных: {e}")
+
+def cleanup_files(coder):
+    """
+    Удаляет все созданные файлы во время работы программы.
+
+    Параметры:
+    coder (HuffmanCoder): Экземпляр класса HuffmanCoder для работы с файлами.
+    """
+    coder.cleanup_files()
+    print("Все созданные файлы удалены.")
 
 if __name__ == '__main__':
     main()
