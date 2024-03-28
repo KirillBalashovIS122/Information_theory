@@ -140,11 +140,13 @@ class HuffmanCoder:
         Сохраняет закодированный текст в двоичном формате в файле 'result'.
         """
         encoded_text = ''.join(self.code[char] for char in self.text)
-        encoded_text = encoded_text + '0' * (8 - (len(encoded_text) % 8))
-        source_data_byte = bytearray([int(encoded_text[i * 8:i * 8 + 8], 2)
-                                      for i in range(int(len(encoded_text) / 8))])
+        padding_length = 8 - (len(encoded_text) % 8)
+        encoded_text += '0' * padding_length
+        source_data_byte = bytes([int(encoded_text[i:i + 8], 2)
+                                  for i in range(0, len(encoded_text), 8)])
         with open(os.path.join(os.path.dirname(__file__), 'result'), 'wb') as file:
             file.write(source_data_byte)
+
 
     def save_json(self):
         """
