@@ -44,13 +44,10 @@ class HuffmanCoder:
         if file_path.endswith('.json'):
             with open(file_path, 'r', encoding='utf-8') as file:
                 self.text = file.read()
-
-            print(f"Загруженные коды Хаффмана из файла: {self.json}")
         else:
             self.file_path = file_path
             with open(file_path, 'r', encoding='utf-8') as file:
                 self.text = file.read()
-            print(f"Загруженный файл: {self.text}")
 
     def bin_file_loader(self, file_path):
         """
@@ -62,7 +59,6 @@ class HuffmanCoder:
         with open(file_path, 'rb') as file:
             result_data_byte = file.read()
             self.bin = ''.join([f'{item:08b}' for item in result_data_byte])
-            print(f"Закодированный двоичный код: {self.bin}")
 
     def encode(self):
         """
@@ -73,19 +69,19 @@ class HuffmanCoder:
             return
 
         letters = set(self.text)
-        frequences = []
+        frequencies = []
         for letter in letters:
-            frequences.append((self.text.count(letter), letter))
+            frequencies.append((self.text.count(letter), letter))
 
-        while len(frequences) > 1:
-            frequences = sorted(frequences, key=lambda x: x[0], reverse=True)
-            first = frequences.pop()
-            second = frequences.pop()
+        while len(frequencies) > 1:
+            frequencies = sorted(frequencies, key=lambda x: x[0], reverse=True)
+            first = frequencies.pop()
+            second = frequencies.pop()
             freq = first[0] + second[0]
-            frequences.append((freq, HuffmanCoder(first[1], second[1])))
+            frequencies.append((freq, HuffmanCoder(first[1], second[1])))
 
-        self.walk(frequences[0][1])
-        print("Текст закодирован")
+        self.walk(frequencies[0][1])
+        self.save_json()  # Сохраняем коды Хаффмана в формате JSON
 
     def walk(self, node, path=''):
         """
@@ -103,11 +99,15 @@ class HuffmanCoder:
 
     def decode(self):
         """
-        Декодирует бинарное представление текста.
-        """
+    Декодирует бинарное представление текста.
+    """
         if self.bin is None:
             print("Файл не загружен!")
             return
+
+    # Загружаем коды Хаффмана из файла JSON
+        with open(os.path.join(os.path.dirname(__file__), 'code.json'), 'r', encoding='utf-8') as file:
+            self.json = json.load(file)
 
         current_code = ""
         for bit in self.bin:
@@ -117,13 +117,13 @@ class HuffmanCoder:
                     self.decoded_text += char
                     current_code = ''
                     break
-        print(self.decoded_text)
 
     def save_decodetxt(self):
         """
         Сохраняет раскодированный текст в файле 'decode_code.txt'.
         """
-        with open('decode_code.txt', encoding='w') as file:
+        with open(os.path.join(os.path.dirname(__file__),
+                               'decode_code.txt'), 'w', encoding='utf-8') as file:
             file.write(self.decoded_text)
 
     def save_bin_code(self):
@@ -131,10 +131,10 @@ class HuffmanCoder:
         Сохраняет закодированный текст в двоичном формате в файле 'result'.
         """
         encoded_text = ''.join(self.code[char] for char in self.text)
-        encoded_text = encoded_text + '0'*(8-(len(encoded_text)%8))
-        source_data_byte = bytearray([int(encoded_text[i*8:i*8+8],2)
-                                      for i in range(int(len(encoded_text)/8))])
-        with open('result', 'wb') as file:
+        encoded_text = encoded_text + '0' * (8 - (len(encoded_text) % 8))
+        source_data_byte = bytearray([int(encoded_text[i * 8:i * 8 + 8], 2)
+                                      for i in range(int(len(encoded_text) / 8))])
+        with open(os.path.join(os.path.dirname(__file__), 'result'), 'wb') as file:
             file.write(source_data_byte)
 
     def save_json(self):
@@ -142,9 +142,9 @@ class HuffmanCoder:
         Сохраняет коды Хаффмана в формате JSON в файле 'code.json'.
         """
         formatted_codes = {char: code for char, code in self.code.items()}
-        with open(os.path.join('code.json'), 'w', encoding='utf-8') as file:
+        with open(os.path.join(os.path.dirname(__file__),
+                               'code.json'), 'w', encoding='utf-8') as file:
             json.dump(formatted_codes, file, ensure_ascii=False, indent=4)
-        print("Файл сохранён")
 
     def shannon_entropy(self, text):
         """
@@ -168,6 +168,7 @@ class HuffmanCoder:
             shannon_ent -= probability * math.log2(probability)
 
         return shannon_ent
+
     def print_data(self):
         """
         Выводит информацию о данных (исходном тексте, коде, энтропии и т. д.).
@@ -182,7 +183,7 @@ class HuffmanCoder:
 
         print("Закодированный текст:")
         print(self.bin)
-        encode_file_size = os.path.getsize("result")
+        encode_file_size = os.path.getsize(os.path.join(os.path.dirname(__file__), 'result'))
         print(f"Размер закодированного файла: {encode_file_size} байт")
 
         entropy = self.shannon_entropy(self.text)

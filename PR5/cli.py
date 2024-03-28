@@ -38,12 +38,9 @@ def encode_text(coder):
     try:
         coder.load_file(file_path)
         coder.encode()
-        print("Текст успешно закодирован")
         coder.save_bin_code()
         coder.save_json()
         print("Код Хаффмана успешно сохранен")
-    except FileNotFoundError:
-        print("Ошибка: Файл не найден. Проверьте путь к файлу")
     except json.JSONDecodeError:
         print("Ошибка: Неверный формат JSON файла с кодом Хаффмана")
 
@@ -63,8 +60,6 @@ def decode_text(coder):
         print("Текст успешно расшифрован")
         coder.save_decodetxt()
         print("Файл успешно сохранен")
-    except FileNotFoundError:
-        print("Ошибка: Файл не найден. Проверьте путь к файлу")
     except json.JSONDecodeError:
         print("Ошибка: Неверный формат JSON файла с кодом Хаффмана")
 
