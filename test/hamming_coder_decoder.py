@@ -1,7 +1,7 @@
 import configparser
 import logging
-import numpy as np
 import random
+import numpy as np
 
 class HammingCoder:
     def __init__(self, config, logger):
@@ -14,8 +14,10 @@ class HammingCoder:
         encoded_data = bytearray()
 
         for block in blocks:
-            # Дополняем блоки, которые короче word_size, нулями до нужной длины
+            print("Block:", block)
+            # Проверяем длину блока и дополняем его нулями, если он короче word_size
             if len(block) < self.word_size:
+                print("Block is shorter than word_size. Padding with zeros.")
                 block += b'\x00' * (self.word_size - len(block))
 
             encoded_block = self._hamming_encode_block(block)
@@ -50,7 +52,9 @@ class HammingCoder:
 
         for i in range(r):
             indices = [2 ** i - 1] + [j for j in range(2 ** i, n + r + 1, 2 ** (i + 1))]
-            hamming_matrix[i, 0] = sum([block[j - 1] for j in indices]) % 2
+            # Проверяем, что индекс внутри диапазона блока
+            valid_indices = [j - 1 for j in indices if j - 1 < n]
+            hamming_matrix[i, 0] = sum([block[j] for j in valid_indices]) % 2
 
         encoded_block = bytearray()
         for i in range(n + r):
@@ -58,6 +62,7 @@ class HammingCoder:
             encoded_block.append(encoded_bit)
 
         return encoded_block
+
 
     def _hamming_decode_block(self, block):
         n = len(block)
