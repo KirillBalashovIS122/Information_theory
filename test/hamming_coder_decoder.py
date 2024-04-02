@@ -14,6 +14,10 @@ class HammingCoder:
         encoded_data = bytearray()
 
         for block in blocks:
+            # Дополняем блоки, которые короче word_size, нулями до нужной длины
+            if len(block) < self.word_size:
+                block += b'\x00' * (self.word_size - len(block))
+
             encoded_block = self._hamming_encode_block(block)
             encoded_data.extend(encoded_block)
 

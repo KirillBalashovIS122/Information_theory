@@ -14,10 +14,16 @@ def setup_logger():
 
 def main():
     config = configparser.ConfigParser()
-    config.read('settings.ini')
-    logger = setup_logger()
-    coder = HammingCoder(config, logger)
+    try:
+        config.read('settings.ini')
+        word_size = int(config.get('Settings', 'word_size', fallback=15))
+    except (configparser.NoSectionError, configparser.NoOptionError, ValueError):
+        print("Ошибка чтения файла settings.ini. Используется значение по умолчанию для word_size.")
+        word_size = 15  # Значение по умолчанию
 
+    logger = setup_logger()
+    coder = HammingCoder(config, logger)  # Передаем объект config
+    
     print("Добро пожаловать в программу кодирования/декодирования по Хэммингу")
 
     while True:
