@@ -81,7 +81,7 @@ class HuffmanCoder:
             frequencies.append((freq, HuffmanCoder(first[1], second[1])))
 
         self.walk(frequencies[0][1])
-        self.save_json()  # Сохраняем коды Хаффмана в формате JSON
+        self.save_json()
 
     def walk(self, node, path=''):
         """
@@ -105,7 +105,6 @@ class HuffmanCoder:
             print("Файл не загружен!")
             return
 
-        # Загружаем коды Хаффмана из файла JSON
         with open(os.path.join(os.path.dirname(__file__), 'code.json'),
                   'r', encoding='utf-8') as file:
             self.json = json.load(file)
@@ -116,12 +115,10 @@ class HuffmanCoder:
             for char, code in self.json.items():
                 if code == current_code:
                     self.decoded_text += char
-                    current_code = ''  # Сбрасываем текущий код
+                    current_code = ''
                     break
 
-        # Проверяем, были ли добавлены дополнительные нули в конец текста
         if current_code:
-            # Если остались непрочитанные биты, добавляем недостающие символы, если это возможно
             for char, code in self.json.items():
                 if code.startswith(current_code):
                     self.decoded_text += char
