@@ -14,8 +14,6 @@ class HammingCoder:
         encoded_data = bytearray()
 
         for block in blocks:
-            print("Block:", block)
-            # Проверяем длину блока и дополняем его нулями, если он короче word_size
             if len(block) < self.word_size:
                 print("Block is shorter than word_size. Padding with zeros.")
                 block += b'\x00' * (self.word_size - len(block))
@@ -34,6 +32,8 @@ class HammingCoder:
             decoded_data.extend(decoded_block)
 
         return decoded_data
+
+
 
     def noise(self, data, num_errors):
         # Вносит ошибки в последовательность байт
@@ -67,25 +67,21 @@ class HammingCoder:
     def _hamming_decode_block(self, block):
         n = len(block)
         r = self._calculate_parity_bits(n)
-
         hamming_matrix = np.zeros((r, n), dtype=int)
-
         for i in range(n):
             hamming_matrix[:, i] = list(map(int, format(i + 1, f'0{r}b')))
-
         syndrome = []
         for row in hamming_matrix:
-            syndrome_bit = sum([block[i] * row[i] for i in range(n)]) % 2
+            syndrome_bit = sum([int(block[i]) * row[i] for i in range(n)]) % 2
             syndrome.append(syndrome_bit)
-
         error_position = sum([syndrome[i] * 2 ** i for i in range(len(syndrome))])
 
         if error_position != 0:
-            block[error_position - 1] = 1 - block[error_position - 1]
-
+            block = block[:error_position - 1] + bytes([1 - int(block[error_position - 1])]) + block[error_position:]
         decoded_block = block[:n - r]
-
         return decoded_block
+
+
 
     def _calculate_parity_bits(self, n):
         r = 0

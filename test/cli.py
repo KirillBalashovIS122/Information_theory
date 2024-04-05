@@ -37,16 +37,17 @@ def main():
 
         if choice == "1":
             text = input("Введите текст для кодирования: ")
-            encoded_data = coder.code(text.encode('utf-8'))
-            print("Закодированные данные:", encoded_data)
+            encoded_data = coder.code(text.encode('utf-8'))  # Преобразуем строку в байты
+            encoded_string = ''.join([str(b) for b in encoded_data])
+            print("Закодированные данные:", encoded_string)
 
         elif choice == "2":
-            encoded_data = input("Введите закодированные данные: ")
-            decoded_data = coder.decode(bytearray.fromhex(encoded_data))
-            print("Декодированные данные:", decoded_data.decode('utf-8'))
+            encoded_data = input("Введите закодированные данные в двоичном формате: ")
+            decoded_data = coder.decode(encoded_data.encode('utf-8'))  # Преобразуем строку в байты
+            print("Декодированные данные:", decoded_data.decode('utf-8'))  # Преобразуем байты обратно в строку
 
         elif choice == "3":
-            encoded_data = input("Введите закодированные данные: ")
+            encoded_data = input("Введите закодированные данные в двоичном формате: ")
             num_errors = int(input("Введите количество ошибок для добавления: "))
             encoded_data_bytes = bytearray.fromhex(encoded_data)
             coder.noise(encoded_data_bytes, num_errors)
