@@ -90,7 +90,7 @@ def get_all_users():
     connection = sqlite3.connect(DB_PATH)
     cursor = connection.cursor()
     cursor.execute("SELECT login FROM Users")
-    all_users = cursor.fetchall()
+    all_users = cursor.fetchall()   
     cursor.close()
     return all_users
 
