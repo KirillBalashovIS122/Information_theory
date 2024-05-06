@@ -1,4 +1,3 @@
-import multiprocessing
 import requests
 
 # Функция для загрузки русского словаря
@@ -21,24 +20,19 @@ def caesar_decrypt(ciphertext, shift):
     return decrypted_text
 
 # Функция для поиска ключа методом брутфорса
-def brute_force(ciphertext, pool_size=4):
-    pool = multiprocessing.Pool(pool_size)
+def brute_force(ciphertext):
     decrypted_options = []
 
-    def decrypt_with_shift(shift):
+    # Генерируем все возможные варианты для каждого сдвига
+    for shift in range(1, len('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')):
         decrypted_text = caesar_decrypt(ciphertext, shift)
-        # Проверяем, является ли расшифрованный текст похожим на русский с помощью словаря
-        with open('russian.txt', 'r', encoding='utf-8') as f:
-            russian_words = set(word.strip().lower() for word in f)
-            decrypted_words = decrypted_text.split()
-            russian_word_count = sum(word.lower() in russian_words for word in decrypted_words)
-            if russian_word_count / len(decrypted_words) > 0.5:
-                decrypted_options.append((shift, decrypted_text))
+        decrypted_options.append((shift, decrypted_text))
 
-    # Перебираем возможные сдвиги в пуле процессов
-    pool.map(decrypt_with_shift, range(1, len('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')))
-    pool.close()
-    pool.join()
+    # Фильтруем только тексты, похожие на русский
+    with open('russian.txt', 'r', encoding='utf-8') as f:
+        russian_words = set(word.strip().lower() for word in f)
+    decrypted_options = [(shift, text) for shift, text in decrypted_options
+                         if sum(word.lower() in russian_words for word in text.split()) / len(text.split()) > 0.5]
 
     return decrypted_options
 
