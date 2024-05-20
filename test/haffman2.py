@@ -1,7 +1,3 @@
-"""
-Module docstring here.
-"""
-
 import json
 from datetime import datetime
 import os
@@ -11,15 +7,15 @@ import shutil
 
 class Node:
     """
-    Class docstring here.
+    Класс представляет узел дерева Хаффмана.
     """
     def __init__(self, left, right):
         """
-        Initialize a new instance of the Node class.
+        Инициализирует новый экземпляр класса Node.
 
-        Parameters:
-        - left: The left child node.
-        - right: The right child node.
+        Параметры:
+        - left: Левый дочерний узел.
+        - right: Правый дочерний узел.
         """
         self.left = left
         self.right = right
@@ -27,14 +23,14 @@ class Node:
     @staticmethod
     def compress_data(text, huff_codes):
         """
-        Compress data using Huffman coding.
+        Сжимает данные, используя кодирование Хаффмана.
 
-        Args:
-            text (str): The input text to compress.
-            huff_codes (dict): The Huffman codes.
+        Аргументы:
+            text (str): Входной текст для сжатия.
+            huff_codes (dict): Коды Хаффмана.
 
-        Returns:
-            str: The compressed data.
+        Возвращает:
+            str: Сжатые данные.
         """
         compressed_data = ""
         for char in text:
@@ -44,13 +40,13 @@ class Node:
     @staticmethod
     def decompress_data(compressed_data, huff_codes):
         """
-        Декодирует бинарные данные с использованием Huffman-кодирования.
+        Декодирует бинарные данные с использованием кодирования Хаффмана.
 
-        Args:
+        Аргументы:
             compressed_data (str): Бинарные данные для декодирования.
             huff_codes (dict): Словарь, содержащий коды Хаффмана.
 
-        Returns:
+        Возвращает:
             str: Раскодированные данные.
         """
         decoded_data = ""
@@ -68,14 +64,14 @@ class Node:
 
 class HuffmanTree:
     """
-    Class docstring here.
+    Класс представляет дерево Хаффмана для кодирования текста.
     """
     def __init__(self, text):
         """
-        Initialize a new instance of the HuffmanTree class.
+        Инициализирует новый экземпляр класса HuffmanTree.
 
-        Parameters:
-        - text: The input text for Huffman coding.
+        Параметры:
+        - text: Входной текст для кодирования Хаффмана.
         """
         self.text = text
         self.letters = set(text)
@@ -83,7 +79,7 @@ class HuffmanTree:
 
     def build_tree(self):
         """
-        Build Huffman tree.
+        Строит дерево Хаффмана.
         """
         while len(self.frequencies) > 1:
             self.frequencies = sorted(self.frequencies, key=lambda x: x[0], reverse=True)
@@ -95,7 +91,15 @@ class HuffmanTree:
 
     def generate_codes(self, node, path='', code=None):
         """
-        Generate Huffman codes.
+        Генерирует коды Хаффмана.
+
+        Параметры:
+        - node: Текущий узел дерева.
+        - path: Текущий путь кода.
+        - code: Словарь для хранения кодов.
+
+        Возвращает:
+            dict: Словарь с кодами Хаффмана.
         """
         if code is None:
             code = {}
@@ -109,11 +113,11 @@ class HuffmanTree:
 
 def delete_folders_by_pattern(base_folder, pattern):
     """
-    Delete folders based on the provided pattern.
+    Удаляет папки, соответствующие заданному шаблону.
 
-    Parameters:
-    - base_folder: The base folder where deletion will be performed.
-    - pattern: The regular expression pattern for matching folder names.
+    Параметры:
+    - base_folder: Базовая папка, в которой будет производиться удаление.
+    - pattern: Регулярное выражение для сопоставления имен папок.
     """
     try:
         for folder_name in os.listdir(base_folder):
@@ -121,15 +125,15 @@ def delete_folders_by_pattern(base_folder, pattern):
             if os.path.isdir(folder_path) and re.match(pattern, folder_name):
                 shutil.rmtree(folder_path)
     except OSError as e:
-        print(f"An error occurred while deleting folders: {e}")
+        print(f"Произошла ошибка при удалении папок: {e}")
 
 
 def save_codes_to_json(data):
     """
-    Save Huffman codes and compressed text to a JSON file.
+    Сохраняет коды Хаффмана и сжатый текст в JSON-файл.
 
-    Parameters:
-    - data: The data to be saved, including Huffman codes and compressed text.
+    Параметры:
+    - data: Данные для сохранения, включая коды Хаффмана и сжатый текст.
     """
     timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     target_folder = "/home/admin/teorinfo2/teorinfo2/pr5"
@@ -143,20 +147,19 @@ def save_codes_to_json(data):
         with open(file_path, 'w', encoding='utf-8') as json_file:
             json.dump(data, json_file, ensure_ascii=False)
     except OSError as e:
-        print(f"An error occurred while saving data to json: {e}")
+        print(f"Произошла ошибка при сохранении данных в JSON: {e}")
 
 
 def create_text_file(decoded_data):
     """
-    Create a text file with decoded data in the specified directory.
+    Создает текстовый файл с декодированными данными в указанной директории.
 
-    Parameters:
-    - decoded_data: The decoded text data.
-
+    Параметры:
+    - decoded_data: Декодированные текстовые данные.
     """
-    timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    timestamp = datetime.now().strftime("%Y-%m-%d-%H-%М-%S")
     target_folder = "/home/admin/teorinfo2/teorinfo2/pr5"
-    delete_folders_by_pattern(target_folder, r'\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}')
+    delete_folders_by_pattern(target_folder, r'\d{4}-\д{2}-\д{2}-\д{2}-\д{2}-\д{2}')
     folder_path = os.path.join(target_folder, timestamp)
     os.makedirs(folder_path, exist_ok=True)
 
@@ -165,16 +168,16 @@ def create_text_file(decoded_data):
         with open(file_path, 'w', encoding='utf-8') as file:
             file.write(decoded_data)
     except OSError as e:
-        print(f"An error occurred while saving decoded text to file: {e}")
+        print(f"Произошла ошибка при сохранении декодированного текста в файл: {e}")
 
 
 def save_binary_data(source_data, file_path):
     """
-    Save binary data to a file.
+    Сохраняет бинарные данные в файл.
 
-    Args:
-        source_data (str): The source data to save.
-        file_path (str): The file path to save the data to.
+    Аргументы:
+        source_data (str): Исходные данные для сохранения.
+        file_path (str): Путь к файлу для сохранения данных.
     """
     source_data = source_data + '0' * (8 - (len(source_data) % 8))
     source_data_byte = bytearray([int(source_data[i * 8:i * 8 + 8], 2)
@@ -185,13 +188,13 @@ def save_binary_data(source_data, file_path):
 
 def load_binary_data(file_path):
     """
-    Load binary data from a file.
+    Загружает бинарные данные из файла.
 
-    Args:
-        file_path (str): The file path to load the data from.
+    Аргументы:
+        file_path (str): Путь к файлу для загрузки данных.
 
-    Returns:
-        str: The loaded binary data.
+    Возвращает:
+        str: Загруженные бинарные данные.
     """
     with open(file_path, 'rb') as file:
         result_data_byte = file.read()
