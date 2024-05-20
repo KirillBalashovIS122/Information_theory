@@ -1,7 +1,8 @@
 import os
 import logging
-from PR6.huffman_pr6 import Huffman
-from PR6.hamming_pr6 import Hamming
+from huffman_pr6 import Huffman
+from hamming_pr6 import Hamming
+
 
 # Проверка наличия файла logfile.log и его создание, если не существует
 if not os.path.exists("logfile.log"):
