@@ -74,3 +74,4 @@ class Hamming:
                 decoded_data.append(encoded_data[i - 1])
 
         return ''.join(decoded_data)
+    
