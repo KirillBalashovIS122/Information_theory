@@ -7,8 +7,7 @@ class Huffman:
     """Класс для работы с кодированием и декодированием данных методом Хаффмана."""
 
     def __init__(self):
-        """Инициализация объекта класса."""
-        self.huffman_codes = {}  # Словарь кодов Хаффмана
+        self.huffman_codes = {}
 
     def encode(self, data):
         """Кодирование данных методом Хаффмана.
@@ -38,17 +37,15 @@ class Huffman:
         self.huffman_codes = dict(priority_queue[0][1:])
         huffman_encoded_data = ''.join(self.huffman_codes[symbol] for symbol in data)
 
-        # Запись длины слова в settings.ini
         config = ConfigParser()
-        config.read('settings.ini')
+        config.read('settings.ini', encoding='utf-8')
         if 'Huffman' not in config.sections():
             config.add_section('Huffman')
         config['Huffman']['Word_Length'] = str(len(data))
-        with open('settings.ini', 'w') as configfile:
+        with open('settings.ini', 'w', encoding='utf-8') as configfile:
             config.write(configfile)
 
-        # Сохранение словаря кодов в JSON файл
-        with open("huffman_codes.json", "w") as file:
+        with open("huffman_codes.json", "w", encoding='utf-8') as file:
             json.dump(self.huffman_codes, file)
 
         return huffman_encoded_data
@@ -62,13 +59,11 @@ class Huffman:
         Returns:
             str: Декодированные данные.
         """
-        # Загрузка словаря кодов из JSON файла
-        with open("huffman_codes.json", "r") as file:
+        with open("huffman_codes.json", "r", encoding='utf-8') as file:
             self.huffman_codes = json.load(file)
 
-        # Чтение длины слова из settings.ini
         config = ConfigParser()
-        config.read('settings.ini')
+        config.read('settings.ini', encoding='utf-8')
         word_length = int(config['Huffman']['Word_Length'])
 
         reverse_huffman_codes = {v: k for k, v in self.huffman_codes.items()}
@@ -81,4 +76,4 @@ class Huffman:
                 decoded_data += reverse_huffman_codes[current_code]
                 current_code = ""
 
-        return decoded_data[:word_length]  # Ограничение по длине слова
+        return decoded_data[:word_length]
