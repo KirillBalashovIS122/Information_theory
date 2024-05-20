@@ -1,7 +1,7 @@
 import json
 import heapq
 from collections import defaultdict
-from configparser import ConfigParser
+from configparser import ConfigParser, NoSectionError, NoOptionError
 
 class Huffman:
     """Класс для работы с кодированием и декодированием данных методом Хаффмана."""
@@ -40,16 +40,22 @@ class Huffman:
 
         # Запись длины слова в settings.ini
         config = ConfigParser()
-        config.read('settings.ini')
-        if 'Huffman' not in config.sections():
-            config.add_section('Huffman')
-        config['Huffman']['Word_Length'] = str(len(data))
-        with open('settings.ini', 'w') as configfile:
-            config.write(configfile)
+        try:
+            config.read('settings.ini', encoding='utf-8')
+            if 'Huffman' not in config.sections():
+                config.add_section('Huffman')
+            config['Huffman']['Word_Length'] = str(len(data))
+            with open('settings.ini', 'w', encoding='utf-8') as configfile:
+                config.write(configfile)
+        except (OSError, IOError) as e:
+            print(f"Ошибка при работе с файлом settings.ini: {e}")
 
         # Сохранение словаря кодов в JSON файл
-        with open("huffman_codes.json", "w") as file:
-            json.dump(self.huffman_codes, file)
+        try:
+            with open("huffman_codes.json", "w", encoding='utf-8') as file:
+                json.dump(self.huffman_codes, file)
+        except (OSError, IOError) as e:
+            print(f"Ошибка при сохранении словаря кодов в JSON файл: {e}")
 
         return huffman_encoded_data
 
@@ -63,13 +69,21 @@ class Huffman:
             str: Декодированные данные.
         """
         # Загрузка словаря кодов из JSON файла
-        with open("huffman_codes.json", "r") as file:
-            self.huffman_codes = json.load(file)
+        try:
+            with open("huffman_codes.json", "r", encoding='utf-8') as file:
+                self.huffman_codes = json.load(file)
+        except (OSError, IOError, json.JSONDecodeError) as e:
+            print(f"Ошибка при загрузке словаря кодов из JSON файла: {e}")
+            return ""
 
         # Чтение длины слова из settings.ini
         config = ConfigParser()
-        config.read('settings.ini')
-        word_length = int(config['Huffman']['Word_Length'])
+        try:
+            config.read('settings.ini', encoding='utf-8')
+            word_length = int(config['Huffman']['Word_Length'])
+        except (OSError, IOError, NoSectionError, NoOptionError, ValueError) as e:
+            print(f"Ошибка при чтении длины слова из settings.ini: {e}")
+            return ""
 
         reverse_huffman_codes = {v: k for k, v in self.huffman_codes.items()}
 
