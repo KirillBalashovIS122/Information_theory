@@ -1,6 +1,6 @@
 from collections import defaultdict
 from math import log2
-from PR8.huffman import Huffman
+from huffman import Huffman
 
 def calculate_entropy(data):
     """Расчет энтропии для исходного текста."""
