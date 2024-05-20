@@ -23,20 +23,22 @@ def encode_file(input_file, output_file):
     huffman = Huffman()
     encoded_data = huffman.encode(data)
 
-    with open(output_file, 'w', encoding='utf-8') as file:  # Указана кодировка 'utf-8'
+    with open(output_file, 'w', encoding='utf-8') as file:  
         file.write(encoded_data)
+    
+    bits_per_symbol = len(encoded_data) / len(data)
 
-    return len(data), len(encoded_data), calculate_entropy(data)
+    return len(data), len(encoded_data), calculate_entropy(data), bits_per_symbol
 
 def decode_file(input_file, output_file):
     """Декодирование файла."""
-    with open(input_file, 'r', encoding='utf-8') as file:  # Указана кодировка 'utf-8'
+    with open(input_file, 'r', encoding='utf-8') as file:  
         encoded_data = file.read()
 
     huffman = Huffman()
     decoded_data = huffman.decode(encoded_data)
 
-    with open(output_file, 'w', encoding='utf-8') as file:  # Указана кодировка 'utf-8'
+    with open(output_file, 'w', encoding='utf-8') as file:  
         file.write(decoded_data)
 
     return len(encoded_data), len(decoded_data)
