@@ -59,7 +59,8 @@ class Node:
         for bit in compressed_data:
             current_code += str(bit)
             if current_code in huff_codes.values():
-                decoded_data += next(symbol for symbol, code in huff_codes.items() if code == current_code)
+                decoded_data += next(symbol for symbol, code in huff_codes.items()
+                                     if code == current_code)
                 current_code = ""
 
         return decoded_data
@@ -176,7 +177,8 @@ def save_binary_data(source_data, file_path):
         file_path (str): The file path to save the data to.
     """
     source_data = source_data + '0' * (8 - (len(source_data) % 8))
-    source_data_byte = bytearray([int(source_data[i * 8:i * 8 + 8], 2) for i in range(int(len(source_data) / 8))])
+    source_data_byte = bytearray([int(source_data[i * 8:i * 8 + 8], 2)
+                                  for i in range(int(len(source_data) / 8))])
     with open(file_path, 'wb') as file:
         file.write(source_data_byte)
 

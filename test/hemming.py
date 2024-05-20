@@ -1,5 +1,4 @@
 class Hamming:
-    ...
 
     def encode(self, data):
         """Кодирует данные методом Хэмминга.
